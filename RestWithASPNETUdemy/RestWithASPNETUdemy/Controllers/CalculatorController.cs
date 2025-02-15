@@ -19,11 +19,22 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpGet("sum/{firstNumber}/{secondNumber}")]
-        public IActionResult Get(string firstNumber, string secondNumber)
+        public IActionResult GetSum(string firstNumber, string secondNumber)
         {
             if(IsNumeric(firstNumber) && IsNumeric(secondNumber))
             {
                 var sum = ConvertToDecimal(firstNumber) + ConvertToDecimal(secondNumber);
+                return Ok(sum.ToString());
+            }
+            return BadRequest("Invalid Input");
+        }
+
+        [HttpGet("sub/{firstNumber}/{secondNumber}")]
+        public IActionResult GetSub(string firstNumber, string secondNumber)
+        {
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            {
+                var sum = ConvertToDecimal(firstNumber) - ConvertToDecimal(secondNumber);
                 return Ok(sum.ToString());
             }
             return BadRequest("Invalid Input");
@@ -36,12 +47,12 @@ namespace RestWithASPNETUdemy.Controllers
             return isNumber;
         }
 
-        private int ConvertToDecimal(string firstNumber)
+        private decimal ConvertToDecimal(string firstNumber)
         {
             decimal decimalValue;
             if (decimal.TryParse(firstNumber, out decimalValue))
             {
-                return Convert.ToInt32(decimalValue);
+                return Convert.ToDecimal(decimalValue);
             }
             return 0;
         }
