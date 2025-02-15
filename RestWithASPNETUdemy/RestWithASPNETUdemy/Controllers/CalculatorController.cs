@@ -40,6 +40,31 @@ namespace RestWithASPNETUdemy.Controllers
             return BadRequest("Invalid Input");
         }
 
+        [HttpGet("mul/{firstNumber}/{secondNumber}")]
+        public IActionResult GetMul(string firstNumber, string secondNumber)
+        {
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            {
+                var sum = ConvertToDecimal(firstNumber) * ConvertToDecimal(secondNumber);
+                return Ok(sum.ToString());
+            }
+            return BadRequest("Invalid Input");
+        }
+
+        [HttpGet("div/{firstNumber}/{secondNumber}")]
+        public IActionResult GetDiv(string firstNumber, string secondNumber)
+        {
+            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            {
+                if (ConvertToDecimal(secondNumber) > 0)
+                {
+                    var sum = ConvertToDecimal(firstNumber) / ConvertToDecimal(secondNumber);
+                    return Ok(sum.ToString());
+                }
+            }
+            return BadRequest("Invalid Input");
+        }
+
         private bool IsNumeric(string firstNumber)
         {
             double number;
