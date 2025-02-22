@@ -1,9 +1,12 @@
+using EvolveDb;
 using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using RestWithASPNETUdemy.Model.Context;
 using RestWithASPNETUdemy.Repository;
 using RestWithASPNETUdemy.Repository.Implementations;
 using RestWithASPNETUdemy.Services;
 using RestWithASPNETUdemy.Services.Implementations;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,11 @@ builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
     connection,
     new MySqlServerVersion(new Version(8, 0, 29)))
 );
+
+if(builder.Environment.IsDevelopment())
+{
+    MigrateDatabase(connection);
+}
 
 // Versioning API
 builder.Services.AddApiVersioning();
@@ -43,3 +51,22 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+void MigrateDatabase(String connection)
+{
+    try
+    {
+        var envolveConnection = new MySqlConnection(connection);
+        var envolve = new Evolve(envolveConnection, Log.Information) 
+        {
+            Locations = new List<string> { "db/migrations", "db/dataset" },
+            IsEraseDisabled = true,
+        };
+        envolve.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Log.Error("Database migration failed.", ex);
+        throw;
+    }
+}
