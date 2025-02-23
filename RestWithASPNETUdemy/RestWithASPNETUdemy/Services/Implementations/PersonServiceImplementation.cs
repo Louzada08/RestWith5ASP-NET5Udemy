@@ -1,13 +1,14 @@
 ﻿using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository;
+using RestWithASPNETUdemy.Repository.Generic;
 
 namespace RestWithASPNETUdemy.Services.Implementations
 {
     public class PersonServiceImplementation : IPersonService
     {
-        private readonly IPersonRepository _repository;
+        private readonly IRepository<Person> _repository;
 
-        public PersonServiceImplementation(IPersonRepository repository)
+        public PersonServiceImplementation(IRepository<Person> repository)
         {
             _repository = repository;
         }

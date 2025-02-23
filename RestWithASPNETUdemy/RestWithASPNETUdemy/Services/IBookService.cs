@@ -5,10 +5,10 @@ namespace RestWithASPNETUdemy.Services
 {
     public interface IBookService
     {
-        Person Create(Person person);
-        Person FindById(long id);
-        List<Person> FindAll();
-        Person Update(Person person);
+        Book Create(Book book);
+        Book FindById(long id);
+        List<Book> FindAll();
+        Book Update(Book book);
         void Delete(long id);
     }
 }
