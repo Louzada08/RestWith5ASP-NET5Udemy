@@ -2,8 +2,7 @@ using EvolveDb;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using RestWithASPNETUdemy.Model.Context;
-using RestWithASPNETUdemy.Repository;
-using RestWithASPNETUdemy.Repository.Implementations;
+using RestWithASPNETUdemy.Repository.Generic;
 using RestWithASPNETUdemy.Services;
 using RestWithASPNETUdemy.Services.Implementations;
 using Serilog;
@@ -33,7 +32,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IPersonService, PersonServiceImplementation>();
-builder.Services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
+builder.Services.AddScoped<IBookService, BookServiceImplementation>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 

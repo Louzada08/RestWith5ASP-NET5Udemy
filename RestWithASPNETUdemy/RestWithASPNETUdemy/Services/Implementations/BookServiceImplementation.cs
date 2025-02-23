@@ -4,18 +4,18 @@ using RestWithASPNETUdemy.Repository.Generic;
 
 namespace RestWithASPNETUdemy.Services.Implementations
 {
-    public class PersonServiceImplementation : IPersonService
+    public class BookServiceImplementation : IBookService
     {
-        private readonly IRepository<Person> _repository;
+        private readonly IRepository<Book> _repository;
 
-        public PersonServiceImplementation(IRepository<Person> repository)
+        public BookServiceImplementation(IRepository<Book> repository)
         {
             _repository = repository;
         }
 
-        public Person Create(Person person)
+        public Book Create(Book book)
         {
-            return _repository.Create(person);
+            return _repository.Create(book);
         }
 
         public void Delete(long id)
@@ -23,19 +23,20 @@ namespace RestWithASPNETUdemy.Services.Implementations
             _repository.Delete(id);
         }
 
-        public List<Person> FindAll()
+        public List<Book> FindAll()
         {
             return _repository.FindAll();
         }
 
-        public Person FindById(long id)
+        public Book FindById(long id)
         {
             return _repository.FindById(id);
         }
 
-        public Person Update(Person person)
+        public Book Update(Book book)
         {
-            return _repository.Update(person);
+            return _repository.Update(book);
         }
+
     }
 }
