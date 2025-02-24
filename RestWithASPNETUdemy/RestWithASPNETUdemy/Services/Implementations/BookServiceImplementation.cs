@@ -1,18 +1,17 @@
 ﻿using RestWithASPNETUdemy.Data.Converter.Implementations;
 using RestWithASPNETUdemy.Data.VO;
 using RestWithASPNETUdemy.Model;
+using RestWithASPNETUdemy.Repository.Abstractions;
 using RestWithASPNETUdemy.Repository.Generic;
-using RestWithASPNETUdemy.Repository.Specific.PersonRepo;
-using System;
 
 namespace RestWithASPNETUdemy.Services.Implementations
 {
     public class BookServiceImplementation : IBookService
     {
-        private readonly IRepository<Book> _repository;
+        private readonly IBookRepository _repository;
         private readonly BookConverter _converter;
 
-        public BookServiceImplementation(IRepository<Book> repository)
+        public BookServiceImplementation(IBookRepository repository)
         {
             _repository = repository;
             _converter = new BookConverter();

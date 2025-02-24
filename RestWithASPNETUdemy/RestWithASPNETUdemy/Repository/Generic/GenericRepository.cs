@@ -31,6 +31,28 @@ namespace RestWithASPNETUdemy.Repository.Generic
 
         }
 
+        public async Task<T> Update(T item)
+        {
+            var result = await dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
+            if (result != null)
+            {
+                try
+                {
+                    _context.Entry(result).CurrentValues.SetValues(item);
+                    await _context.SaveChangesAsync();
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public async Task Delete(long id)
         {
             var result = dataset.SingleOrDefault(p => p.Id.Equals(id));
@@ -56,28 +78,6 @@ namespace RestWithASPNETUdemy.Repository.Generic
         public async Task<T> FindById(long id)
         {
             return await dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
-        }
-
-        public async Task<T> Update(T item)
-        {
-            var result = await dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
-            if (result != null)
-            {
-                try
-                {
-                    _context.Entry(result).CurrentValues.SetValues(item);
-                    await _context.SaveChangesAsync();
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }
-            else
-            {
-                return null;
-            }
         }
 
         public async Task<bool> Exists(long id)
