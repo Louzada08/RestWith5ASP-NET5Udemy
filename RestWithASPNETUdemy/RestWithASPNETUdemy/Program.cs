@@ -26,6 +26,15 @@ if(builder.Environment.IsDevelopment())
     MigrateDatabase(connection);
 }
 
+builder.Services.AddMvc(options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
+    options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json");
+    options.FormatterMappings.SetMediaTypeMappingForFormat("pdf", "application/pdf");
+})
+    .AddXmlSerializerFormatters();
+
 // Versioning API
 builder.Services.AddApiVersioning();
 
