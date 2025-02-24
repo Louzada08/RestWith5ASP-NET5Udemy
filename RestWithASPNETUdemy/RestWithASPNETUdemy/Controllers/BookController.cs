@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using RestWithASPNETUdemy.Data.VO;
 using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Services;
 
@@ -34,14 +35,14 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Book book)
+        public async Task<IActionResult> Post([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
             return Ok(await _bookService.Create(book));
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Book book)
+        public async Task<IActionResult> Put([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
             return Ok(await _bookService.Update(book));

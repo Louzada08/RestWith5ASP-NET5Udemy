@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using RestWithASPNETUdemy.Data.VO;
 using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Services;
 
@@ -34,14 +35,14 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Person person)
+        public async Task<IActionResult> Post([FromBody] PersonVO person)
         {
             if (person == null) return BadRequest();
             return Ok(await _personService.Create(person));
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Person person)
+        public async Task<IActionResult> Put([FromBody] PersonVO person)
         {
             if (person == null) return BadRequest();
             return Ok(await _personService.Update(person));

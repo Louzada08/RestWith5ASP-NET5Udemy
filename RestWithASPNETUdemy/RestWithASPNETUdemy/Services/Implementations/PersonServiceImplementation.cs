@@ -1,4 +1,5 @@
-﻿using RestWithASPNETUdemy.Model;
+﻿using RestWithASPNETUdemy.Data.Converter.Implementations;
+using RestWithASPNETUdemy.Data.VO;
 using RestWithASPNETUdemy.Repository.Specific.PersonRepo;
 
 namespace RestWithASPNETUdemy.Services.Implementations
@@ -6,30 +7,38 @@ namespace RestWithASPNETUdemy.Services.Implementations
     public class PersonServiceImplementation : IPersonService
     {
         private readonly IPersonRepository _repository;
+        private readonly PersonConverter _converter;
 
         public PersonServiceImplementation(IPersonRepository repository)
         {
             _repository = repository;
+            _converter = new PersonConverter();
         }
 
-        public async Task<Person> Create(Person person)
+        public async Task<PersonVO> Create(PersonVO person)
         {
-            return await _repository.Create(person);
+            var personEntity = _converter.Parse(person);
+            personEntity = await _repository.Create(personEntity);
+
+            return _converter.Parse(personEntity);
         }
 
-        public async Task<List<Person>> FindAll()
+        public async Task<List<PersonVO>> FindAll()
         {
-            return await _repository.FindAll();
+            return _converter.Parse(await _repository.FindAll());
         }
 
-        public async Task<Person> FindById(long id)
+        public async Task<PersonVO> FindById(long id)
         {
-            return await _repository.FindById(id);
+            return  _converter.Parse(await _repository.FindById(id));
         }
 
-        public async Task<Person> Update(Person person)
+        public async Task<PersonVO> Update(PersonVO person)
         {
-            return await _repository.Update(person);
+            var personEntity = _converter.Parse(person);
+            personEntity = await _repository.Update(personEntity);
+
+            return _converter.Parse(personEntity);
         }
     }
 }
