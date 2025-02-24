@@ -14,6 +14,18 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Add services to the container.
+#region Configure CORS
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Development",
+        b =>
+            b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+    );
+});
+#endregion
+// Add services to the container.
 
 builder.Services.AddControllers();
 
@@ -75,6 +87,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(x =>
+x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
 
