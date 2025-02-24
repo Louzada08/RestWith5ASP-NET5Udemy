@@ -20,12 +20,20 @@ namespace RestWithASPNETUdemy.Controllers
             _bookService = bookService;
         }
 
+        /// <summary>
+        /// Carrega todos os livros
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             return Ok(await _bookService.FindAll());
         }
 
+        /// <summary>
+        /// Carrega um livro por ID
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
@@ -34,6 +42,10 @@ namespace RestWithASPNETUdemy.Controllers
             return Ok(book);
         }
 
+        /// <summary>
+        /// Registra/cadastra um novo livro
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] BookVO book)
         {
