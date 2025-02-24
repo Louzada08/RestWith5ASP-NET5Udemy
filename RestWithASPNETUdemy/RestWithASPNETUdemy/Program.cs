@@ -9,6 +9,7 @@ using RestWithASPNETUdemy.Repository.Specific.PersonRepo;
 using RestWithASPNETUdemy.Services;
 using RestWithASPNETUdemy.Services.Implementations;
 using Serilog;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,24 @@ builder.Services.AddApiVersioning();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() {
+        Title = "Rest API´s de 0 a Azure com ASP.NET Core 8 e Docker",
+        Version = "v1",
+        Description = "API RESTful desenvolvida no curso de ASP.NET Core 8",
+        Contact = new()
+        {
+            Name = "Leandro Costa",
+            Url = new Uri("https://github.com/leandrocgsi")
+        }
+    });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
