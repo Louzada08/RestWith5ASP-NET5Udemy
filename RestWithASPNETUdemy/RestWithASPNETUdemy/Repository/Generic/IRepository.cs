@@ -5,11 +5,11 @@ namespace RestWithASPNETUdemy.Repository.Generic
 {
     public interface IRepository<T> where T : BaseEntity
     {
-        T Create(T item);
-        T FindById(long id);
-        List<T> FindAll();
-        T Update(T item);
-        void Delete(long id);
-        bool Exists(long id);
+        Task<T> Create(T item);
+        Task<T> FindById(long id);
+        Task<List<T>> FindAll();
+        Task<T> Update(T item);
+        Task Delete(long id);
+        Task<bool> Exists(long id);
     }
 }

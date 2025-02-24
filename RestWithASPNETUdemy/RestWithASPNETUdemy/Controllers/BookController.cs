@@ -20,37 +20,37 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(_bookService.FindAll());
+            return Ok(await _bookService.FindAll());
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            var book = _bookService.FindById(id);
+            var book = await _bookService.FindById(id);
             if (book == null) return NotFound();
             return Ok(book);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Book book)
+        public async Task<IActionResult> Post([FromBody] Book book)
         {
             if (book == null) return BadRequest();
-            return Ok(_bookService.Create(book));
+            return Ok(await _bookService.Create(book));
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] Book book)
+        public async Task<IActionResult> Put([FromBody] Book book)
         {
             if (book == null) return BadRequest();
-            return Ok(_bookService.Update(book));
+            return Ok(await _bookService.Update(book));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public async Task<IActionResult> Delete(long id)
         {
-            _bookService.Delete(id);
+            await _bookService.Delete(id);
             return NoContent();
         }
     }

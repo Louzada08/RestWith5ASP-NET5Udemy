@@ -1,13 +1,13 @@
 ﻿using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository.Generic;
 
-namespace RestWithASPNETUdemy.Services.Implementations
+namespace RestWithASPNETUdemy.Repository.Specific.BookRepo
 {
-    public class BookServiceImplementation : IBookService
+    public class BookRepository : IBookRepository
     {
         private readonly IRepository<Book> _repository;
 
-        public BookServiceImplementation(IRepository<Book> repository)
+        public BookRepository(IRepository<Book> repository)
         {
             _repository = repository;
         }
@@ -20,6 +20,11 @@ namespace RestWithASPNETUdemy.Services.Implementations
         public async Task Delete(long id)
         {
             await _repository.Delete(id);
+        }
+
+        public async Task<bool> Exists(long id)
+        {
+            return await _repository.Exists(id);
         }
 
         public async Task<List<Book>> FindAll()
@@ -36,6 +41,5 @@ namespace RestWithASPNETUdemy.Services.Implementations
         {
             return await _repository.Update(book);
         }
-
     }
 }
