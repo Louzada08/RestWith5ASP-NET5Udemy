@@ -1,13 +1,13 @@
 ﻿using RestWithASPNETUdemy.Model;
-using System.Collections.Generic;
 
-namespace RestWithASPNETUdemy.Services
+namespace RestWithASPNETUdemy.Repository.Specific.PersonRepo
 {
-    public interface IPersonService
+    public interface IPersonRepository
     {
         Task<Person> Create(Person person);
         Task<Person> FindById(long id);
         Task<List<Person>> FindAll();
         Task<Person> Update(Person person);
+        Task<bool> Exists(long id);
     }
 }

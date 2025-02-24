@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using RestWithASPNETUdemy.Model.Context;
 using RestWithASPNETUdemy.Repository.Generic;
+using RestWithASPNETUdemy.Repository.Specific.BookRepo;
+using RestWithASPNETUdemy.Repository.Specific.PersonRepo;
 using RestWithASPNETUdemy.Services;
 using RestWithASPNETUdemy.Services.Implementations;
 using Serilog;
@@ -31,6 +33,8 @@ builder.Services.AddApiVersioning();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IPersonService, PersonServiceImplementation>();
 builder.Services.AddScoped<IBookService, BookServiceImplementation>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));

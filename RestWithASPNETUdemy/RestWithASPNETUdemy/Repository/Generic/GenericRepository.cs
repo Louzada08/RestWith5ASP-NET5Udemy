@@ -16,12 +16,12 @@ namespace RestWithASPNETUdemy.Repository.Generic
             dataset = _context.Set<T>();
         }
 
-        public T Create(T item)
+        public async Task<T> Create(T item)
         {
             try
             {
-                dataset.Add(item);
-                _context.SaveChanges();
+                await dataset.AddAsync(item);
+                await _context.SaveChangesAsync();
                 return item;
             }
             catch (Exception ex)
@@ -31,7 +31,7 @@ namespace RestWithASPNETUdemy.Repository.Generic
 
         }
 
-        public void Delete(long id)
+        public async Task Delete(long id)
         {
             var result = dataset.SingleOrDefault(p => p.Id.Equals(id));
             if (result != null)
@@ -39,7 +39,7 @@ namespace RestWithASPNETUdemy.Repository.Generic
                 try
                 {
                     dataset.Remove(result);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -48,25 +48,25 @@ namespace RestWithASPNETUdemy.Repository.Generic
             }
         }
 
-        public List<T> FindAll()
+        public async Task<List<T>> FindAll()
         {
-            return dataset.ToList();
+            return await dataset.ToListAsync();
         }
 
-        public T FindById(long id)
+        public async Task<T> FindById(long id)
         {
-            return dataset.SingleOrDefault(p => p.Id.Equals(id));
+            return await dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
         }
 
-        public T Update(T item)
+        public async Task<T> Update(T item)
         {
-            var result = dataset.SingleOrDefault(p => p.Id.Equals(item.Id));
+            var result = await dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
             if (result != null)
             {
                 try
                 {
                     _context.Entry(result).CurrentValues.SetValues(item);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return result;
                 }
                 catch (Exception ex)
@@ -80,9 +80,9 @@ namespace RestWithASPNETUdemy.Repository.Generic
             }
         }
 
-        public bool Exists(long id)
+        public async Task<bool> Exists(long id)
         {
-            return dataset.Any(p => p.Id.Equals(id));
+            return await dataset.AnyAsync(p => p.Id.Equals(id));
         }
 
     }

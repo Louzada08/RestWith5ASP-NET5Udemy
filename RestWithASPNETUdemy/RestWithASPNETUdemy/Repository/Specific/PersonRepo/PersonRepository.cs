@@ -1,13 +1,13 @@
 ﻿using RestWithASPNETUdemy.Model;
-using RestWithASPNETUdemy.Repository.Specific.PersonRepo;
+using RestWithASPNETUdemy.Repository.Generic;
 
-namespace RestWithASPNETUdemy.Services.Implementations
+namespace RestWithASPNETUdemy.Repository.Specific.PersonRepo
 {
-    public class PersonServiceImplementation : IPersonService
+    public class PersonRepository : IPersonRepository
     {
-        private readonly IPersonRepository _repository;
+        private readonly IRepository<Person> _repository;
 
-        public PersonServiceImplementation(IPersonRepository repository)
+        public PersonRepository(IRepository<Person> repository)
         {
             _repository = repository;
         }
@@ -15,6 +15,11 @@ namespace RestWithASPNETUdemy.Services.Implementations
         public async Task<Person> Create(Person person)
         {
             return await _repository.Create(person);
+        }
+
+        public async Task<bool> Exists(long id)
+        {
+            return await _repository.Exists(id);
         }
 
         public async Task<List<Person>> FindAll()
