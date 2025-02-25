@@ -19,14 +19,15 @@ namespace RestWithASPNETUdemy.Repository
         public User? ValidateCredentials(UserVO user)
         {
             var pass = ComputeHash(user.Password, SHA256.Create());
-            return _context.Users.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == pass));
+            var userResponse = _context.Users.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == pass));
+            return userResponse;
         }
 
         public User? ValidateCredentials(string userName)
         {
             return _context.Users.SingleOrDefault(u => (u.UserName == userName));
         }
-
+        
         public bool RevokeToken(string userName)
         {
             var user = _context.Users.SingleOrDefault(u => (u.UserName == userName));

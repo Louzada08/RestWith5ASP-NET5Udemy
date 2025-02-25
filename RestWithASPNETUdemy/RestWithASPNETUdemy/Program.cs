@@ -1,22 +1,23 @@
 using EvolveDb;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;
+using RestWithASPNETUdemy.Configurations;
+using RestWithASPNETUdemy.InfraIOC;
 using RestWithASPNETUdemy.Model.Context;
-using RestWithASPNETUdemy.Repository;
-using RestWithASPNETUdemy.Repository.Abstractions;
-using RestWithASPNETUdemy.Repository.Generic;
-using RestWithASPNETUdemy.Repository.Specific.PersonRepo;
-using RestWithASPNETUdemy.Services;
-using RestWithASPNETUdemy.Services.Implementations;
 using Serilog;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Add services to the container.
-#region Configure CORS
+builder.Services.AddAuthorizationRestUdemyConfiguration(builder.Configuration);
 
+#region Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Development",
@@ -73,11 +74,7 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
-builder.Services.AddScoped<IBookRepository, BookRepository>();
-builder.Services.AddScoped<IPersonRepository, PersonRepository>();
-builder.Services.AddScoped<IPersonService, PersonServiceImplementation>();
-builder.Services.AddScoped<IBookService, BookServiceImplementation>();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+builder.Services.AddServicesInjector();
 
 var app = builder.Build();
 
