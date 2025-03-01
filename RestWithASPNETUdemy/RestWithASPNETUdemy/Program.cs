@@ -1,10 +1,5 @@
 using EvolveDb;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using RestWithASPNETUdemy.Configurations;
@@ -12,7 +7,6 @@ using RestWithASPNETUdemy.InfraIOC;
 using RestWithASPNETUdemy.Model.Context;
 using Serilog;
 using System.Reflection;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
