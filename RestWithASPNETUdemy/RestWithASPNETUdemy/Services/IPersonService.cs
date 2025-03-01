@@ -8,5 +8,6 @@ namespace RestWithASPNETUdemy.Services
         Task<PersonVO> FindById(long id);
         Task<List<PersonVO>> FindAll();
         Task<PersonVO> Update(PersonVO person);
+        Task<PersonVO> Disable(long id);
     }
 }

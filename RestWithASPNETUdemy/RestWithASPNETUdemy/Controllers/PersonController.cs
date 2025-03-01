@@ -49,5 +49,17 @@ namespace RestWithASPNETUdemy.Controllers
             return Ok(await _personService.Update(person));
         }
 
+        [HttpPatch("{id}")]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        public async Task<IActionResult> Patch(long id)
+        {
+            var person = await _personService.Disable(id);
+            return Ok(person);
+        }
+
+
     }
 }
