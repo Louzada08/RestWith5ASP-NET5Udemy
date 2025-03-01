@@ -1,0 +1,2 @@
+﻿ALTER TABLE  person 
+	ADD enabled BOOL NOT NULL DEFAULT 1 AFTER gender;

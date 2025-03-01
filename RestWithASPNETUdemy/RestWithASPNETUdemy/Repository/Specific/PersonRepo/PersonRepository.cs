@@ -1,40 +1,36 @@
-﻿using RestWithASPNETUdemy.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using RestWithASPNETUdemy.Model;
+using RestWithASPNETUdemy.Model.Context;
 using RestWithASPNETUdemy.Repository.Generic;
 
 namespace RestWithASPNETUdemy.Repository.Specific.PersonRepo
 {
-    public class PersonRepository : IPersonRepository
+    public class PersonRepository : GenericRepository<Person>, IPersonRepository
     {
-        private readonly IRepository<Person> _repository;
-
-        public PersonRepository(IRepository<Person> repository)
+        public PersonRepository(MySQLContext context) : base(context)
         {
-            _repository = repository;
         }
 
-        public async Task<Person> Create(Person person)
+        public async Task<Person> Disable(long id)
         {
-            return await _repository.Create(person);
-        }
+            if (!await _context.Persons.AnyAsync(p => p.Id.Equals(id))) return null;
+            var person = await _context.Persons.SingleOrDefaultAsync(p => p.Id.Equals(id));
+            if (person != null)
+            {
+                person.Enabled = false;
 
-        public async Task<bool> Exists(long id)
-        {
-            return await _repository.Exists(id);
-        }
+                try
+                {
+                    _context.Entry(person).CurrentValues.SetValues(person);
+                    await _context.SaveChangesAsync();
+                }
+                catch
+                {
+                    throw;
+                }
+            }
 
-        public async Task<List<Person>> FindAll()
-        {
-            return await _repository.FindAll();
-        }
-
-        public async Task<Person> FindById(long id)
-        {
-            return await _repository.FindById(id);
-        }
-
-        public async Task<Person> Update(Person person)
-        {
-            return await _repository.Update(person);
+            return person;
         }
     }
 }

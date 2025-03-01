@@ -1,4 +1,5 @@
 ﻿using RestWithASPNETUdemy.Model;
+using RestWithASPNETUdemy.Repository.Generic;
 
 namespace RestWithASPNETUdemy.Repository.Specific.PersonRepo
 {
@@ -8,6 +9,7 @@ namespace RestWithASPNETUdemy.Repository.Specific.PersonRepo
         Task<Person> FindById(long id);
         Task<List<Person>> FindAll();
         Task<Person> Update(Person person);
+        Task<Person> Disable(long id);
         Task<bool> Exists(long id);
     }
 }
