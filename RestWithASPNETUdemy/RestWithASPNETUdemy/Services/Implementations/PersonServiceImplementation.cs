@@ -42,10 +42,16 @@ namespace RestWithASPNETUdemy.Services.Implementations
             return  _converter.Parse(await _repository.FindById(id));
         }
 
+        public async Task<List<PersonVO>> FindByName(string firstName, string lastName)
+        {
+            return _converter.Parse(await _repository.FindByName(firstName, lastName));
+        }
+
         public async Task<PersonVO> Disable(long id)
         {
             var personEntity = _converter.Parse(await _repository.Disable(id));
             return personEntity;
         }
+
     }
 }

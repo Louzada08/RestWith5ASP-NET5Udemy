@@ -32,5 +32,25 @@ namespace RestWithASPNETUdemy.Repository.Specific.PersonRepo
 
             return person;
         }
+
+        public async Task<List<Person>> FindByName(string firstName, string lastName)
+        {
+            var person = new List<Person>();
+
+            if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
+            { 
+                 person = await _context.Persons.Where(p => p.FirstName.Contains(firstName) &&
+                        p.LastName.Contains(lastName)).ToListAsync();
+            }
+            else if (string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
+            {
+                person = await _context.Persons.Where(p => p.LastName.Contains(lastName)).ToListAsync();
+            }
+            else if (!string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName))
+            {
+                person = await _context.Persons.Where(p => p.FirstName.Contains(firstName)).ToListAsync();
+            }
+            return person;
+        }
     }
 }
