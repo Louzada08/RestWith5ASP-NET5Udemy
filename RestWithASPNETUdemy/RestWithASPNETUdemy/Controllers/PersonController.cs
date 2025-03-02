@@ -22,15 +22,32 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> Get()
         {
             return Ok(await _personService.FindAll());
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> Get(long id)
         {
             var person = await _personService.FindById(id);
+            if (person == null) return NotFound();
+            return Ok(person);
+        }
+
+        [HttpGet("findPersonByName")]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> Get([FromQuery] string firstName, [FromQuery] string lastName)
+        {
+            var person = await _personService.FindByName(firstName, lastName);
             if (person == null) return NotFound();
             return Ok(person);
         }

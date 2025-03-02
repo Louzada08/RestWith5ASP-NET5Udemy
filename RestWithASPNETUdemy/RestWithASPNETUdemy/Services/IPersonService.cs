@@ -6,6 +6,7 @@ namespace RestWithASPNETUdemy.Services
     {
         Task<PersonVO> Create(PersonVO person);
         Task<PersonVO> FindById(long id);
+        Task<List<PersonVO>> FindByName(string firstName, string lastName); 
         Task<List<PersonVO>> FindAll();
         Task<PersonVO> Update(PersonVO person);
         Task<PersonVO> Disable(long id);

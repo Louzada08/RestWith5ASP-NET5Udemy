@@ -10,6 +10,7 @@ namespace RestWithASPNETUdemy.Repository.Specific.PersonRepo
         Task<List<Person>> FindAll();
         Task<Person> Update(Person person);
         Task<Person> Disable(long id);
+        Task<List<Person>> FindByName(string firstName, string lastName);
         Task<bool> Exists(long id);
     }
 }
