@@ -41,6 +41,16 @@ namespace RestWithASPNETUdemy.Controllers
             return Ok(person);
         }
 
+        [HttpGet("{sortDirection}/{pageSize}/{page}")]
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> Get([FromQuery] string name, string sortDirection, int pageSize, int page)
+        {
+            return Ok(await _personService.FindWithPagedSearch(name, sortDirection, pageSize, page));
+        }
+
         [HttpGet("findPersonByName")]
         [ProducesResponseType((200), Type = typeof(PersonVO))]
         [ProducesResponseType(400)]

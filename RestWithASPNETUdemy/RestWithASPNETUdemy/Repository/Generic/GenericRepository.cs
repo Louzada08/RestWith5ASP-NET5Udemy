@@ -84,5 +84,24 @@ namespace RestWithASPNETUdemy.Repository.Generic
             return await dataset.AnyAsync(p => p.Id.Equals(id));
         }
 
+        public async Task<List<T>> FindWithPagedSearch(string query)
+        {
+            return await dataset.FromSqlRaw<T>(query).ToListAsync();
+        }
+
+        public int GetCount(string query)
+        {
+            var result = string.Empty;
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = query;
+                    result = command.ExecuteScalar().ToString();
+                }
+            }
+            return int.Parse(result);
+        }
     }
 }

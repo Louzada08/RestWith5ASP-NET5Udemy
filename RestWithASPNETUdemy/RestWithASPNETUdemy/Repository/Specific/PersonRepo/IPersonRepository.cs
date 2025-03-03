@@ -11,6 +11,8 @@ namespace RestWithASPNETUdemy.Repository.Specific.PersonRepo
         Task<Person> Update(Person person);
         Task<Person> Disable(long id);
         Task<List<Person>> FindByName(string firstName, string lastName);
+        Task<List<Person>> FindWithPagedSearch(string query);
+        int GetCount(string query);
         Task<bool> Exists(long id);
     }
 }
