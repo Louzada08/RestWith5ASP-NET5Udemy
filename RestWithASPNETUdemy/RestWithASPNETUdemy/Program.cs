@@ -9,6 +9,7 @@ using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+var appVersion = "v1";
 
 builder.Services.AddAuthorizationRestUdemyConfiguration(builder.Configuration);
 
@@ -21,41 +22,17 @@ builder.Services.AddCors(options =>
     );
 });
 #endregion
-// Add services to the container.
 
 builder.Services.AddControllers();
 
-var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
-builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
-    connection,
-    new MySqlServerVersion(new Version(8, 0, 29)))
-);
-
-if(builder.Environment.IsDevelopment())
-{
-    MigrateDatabase(connection);
-}
-
-builder.Services.AddMvc(options =>
-{
-    options.RespectBrowserAcceptHeader = true;
-    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
-    options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json");
-    options.FormatterMappings.SetMediaTypeMappingForFormat("pdf", "application/pdf");
-})
-    .AddXmlSerializerFormatters();
-
-// Versioning API
-builder.Services.AddApiVersioning();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() {
+    c.SwaggerDoc(appVersion, new()
+    {
         Title = "Rest API´s de 0 a Azure com ASP.NET Core 8 e Docker",
-        Version = "v1",
+        Version = appVersion,
         Description = "API RESTful desenvolvida no curso de ASP.NET Core 8",
         Contact = new()
         {
@@ -81,6 +58,29 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 
+
+var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
+builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
+    connection,
+    new MySqlServerVersion(new Version(8, 0, 29)))
+);
+
+if(builder.Environment.IsDevelopment())
+{
+    MigrateDatabase(connection);
+}
+
+builder.Services.AddMvc(options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
+    options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json");
+})
+    .AddXmlSerializerFormatters();
+
+// Versioning API
+builder.Services.AddApiVersioning();
+
 builder.Services.AddServicesInjector();
 
 var app = builder.Build();
@@ -94,6 +94,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(x =>
 x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+app.UseDeveloperExceptionPage();
 
 app.UseHttpsRedirection();
 
