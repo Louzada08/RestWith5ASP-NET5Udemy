@@ -19,23 +19,33 @@ namespace RestWithASPNETUdemy.Controllers
             _fileService = fileService;
         }
 
-        [HttpGet("downloadFile/{fileName}")]
+        [HttpGet("downloadFile/{name}")]
         [ProducesResponseType((200), Type = typeof(byte[]))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         //[Produces("application/octet-stream")]
-        public async Task<IActionResult> GetFileAsync(string fileName)
+        public async Task<IActionResult> GetFileAsync(string name)
         {
-            byte[] buffer = _fileService.GetFile(fileName);
-            if (buffer != null)
+            var folderName = Path.Combine("UploadDir");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var fileName = name;
+            var fullPath = Path.Combine(pathToSave, fileName);
+
+           // fileDetail.DocUrl = Path.Combine(baseUrl + "/api/file/v1/" + fileDetail.DocumentName);
+
+            if (!System.IO.File.Exists(fullPath))
             {
-                HttpContext.Response.ContentType =
-                    $"application/{Path.GetExtension(fileName).Replace(".", "")}";
-                HttpContext.Response.Headers.Add("content-length", buffer.Length.ToString());
-                await HttpContext.Response.Body.WriteAsync(buffer, 0, buffer.Length);
+                return null;
             }
-            return new ContentResult();
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(fullPath);
+            var fileContentResult = new FileContentResult(fileBytes, "application/octet-stream")
+            {
+                FileDownloadName = fileName,
+            };
+
+            return fileContentResult;
         }
 
 
