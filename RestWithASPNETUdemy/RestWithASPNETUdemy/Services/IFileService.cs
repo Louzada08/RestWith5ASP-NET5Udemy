@@ -6,6 +6,6 @@ namespace RestWithASPNETUdemy.Services
     {
         public byte[] GetFile(string filename);
         public Task<FileDetailVO> SaveFileToDisk(IFormFile file);
-        public Task<List<FileDetailVO>> SaveFilesToDisk(IList<IFormFile> file);
+        public Task<Dictionary<string, string>> SaveFilesToDisk(IList<IFormFile> file);
     }
 }

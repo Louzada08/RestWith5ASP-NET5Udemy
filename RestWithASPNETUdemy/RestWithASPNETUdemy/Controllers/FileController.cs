@@ -43,44 +43,30 @@ namespace RestWithASPNETUdemy.Controllers
         [ProducesResponseType((200), Type = typeof(FileDetailVO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        //[Produces("application/json")]
         public async Task<IActionResult> UploadOneFile([FromForm] FileUploadModel model)
         {
             if(model.File == null && model.File.Length == 0) return BadRequest("Invalid file");
 
-            var folderName = Path.Combine("UploadDir", "AllFiles");
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            if(!Directory.Exists(pathToSave))
-            {
-                Directory.CreateDirectory(pathToSave);
-            }
-            var fileName = model.File.FileName;
-            var fullPath = Path.Combine(pathToSave, fileName);
-            var dbPath = Path.Combine(folderName, fileName);
+            FileDetailVO res = await _fileService.SaveFileToDisk(model.File);
 
-            if (System.IO.File.Exists(fullPath))
-            { 
-                return BadRequest("File already exists"); 
-            }
+            if (res.DocumentName == "") return BadRequest($"Arquivo {res.DocUrl} já existe!");
 
-            using (var stream = new FileStream(fullPath, FileMode.Create))
-            {
-                await model.File.CopyToAsync(stream);
-            }
-            FileDetailVO detail = await _fileService.SaveFileToDisk(model.File);
-            //return new OkObjectResult(detail);
-            return Ok();
+            return Ok($"Arquivo {res.DocumentName} copiado com sucesso!");
         }
 
         [HttpPost("uploadMultipleFiles")]
         [ProducesResponseType((200), Type = typeof(List<FileDetailVO>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-       // [Produces("application/json")]
-        public async Task<IActionResult> UploadManyFiles([FromForm] List<IFormFile> files)
+        public async Task<IActionResult> UploadManyFiles([FromForm] FileUploadManyModel model)
         {
-            List<FileDetailVO> details = await _fileService.SaveFilesToDisk(files);
-            return new OkObjectResult(details);
+            var response = new Dictionary<string, string>();
+
+            if (model.Files == null || model.Files.Count == 0) return BadRequest("Invalid file");
+
+            var res = await _fileService.SaveFilesToDisk(model.Files);
+
+            return new OkObjectResult(response);
         }
 
     }
