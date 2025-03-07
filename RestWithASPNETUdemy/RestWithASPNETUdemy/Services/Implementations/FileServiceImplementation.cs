@@ -1,4 +1,6 @@
-﻿using RestWithASPNETUdemy.Data.VO;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using RestWithASPNETUdemy.Data.VO;
+using System;
 
 namespace RestWithASPNETUdemy.Services.Implementations
 {
@@ -26,8 +28,8 @@ namespace RestWithASPNETUdemy.Services.Implementations
             var fileType = Path.GetExtension(file.FileName);
             var baseUrl = _context.HttpContext.Request.Host;
 
-            if (fileType.ToLower() == ".pdf" || fileType.ToLower() == ".jpg" ||
-                fileType.ToLower() == ".png" || fileType.ToLower() == ".jpeg")
+            if (fileType.ToLower() != ".exe" && fileType.ToLower() != ".bat" &&
+                fileType.ToLower() != ".com" && fileType.ToLower() != ".dll")
             {
                 var docName = Path.GetFileName(file.FileName);
                 if (file != null && file.Length > 0)
@@ -37,21 +39,50 @@ namespace RestWithASPNETUdemy.Services.Implementations
                     fileDetail.DocType = fileType;
                     fileDetail.DocUrl = Path.Combine(baseUrl + "/api/file/v1/" + fileDetail.DocumentName);
 
+                    if (System.IO.File.Exists(destination))
+                    {
+                        fileDetail.DocumentName = "";
+                        return fileDetail;
+                    }
                     using var stream = new FileStream(destination, FileMode.Create);
                     await file.CopyToAsync(stream);
+
                 }
             }
             return fileDetail;
         }
 
-        public async Task<List<FileDetailVO>> SaveFilesToDisk(IList<IFormFile> files)
+        public async Task<Dictionary<string, string>> SaveFilesToDisk(IList<IFormFile> files)
         {
-            List<FileDetailVO> list = new List<FileDetailVO>();
+            var response = new Dictionary<string, string>();
+
             foreach (var file in files)
             {
-                list.Add(await SaveFileToDisk(file));
+                var folderName = Path.Combine("UploadDir", "AllFiles");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                if (!Directory.Exists(pathToSave))
+                {
+                    Directory.CreateDirectory(pathToSave);
+                }
+
+                var fileName = file.FileName;
+                var fullPath = Path.Combine(pathToSave, fileName);
+                var dbPath = Path.Combine(folderName, fileName);
+
+                if (!System.IO.File.Exists(fullPath))
+                {
+                    using var memoryStream = new MemoryStream();
+                    await file.CopyToAsync(memoryStream);
+                    await System.IO.File.WriteAllBytesAsync(fullPath, memoryStream.ToArray());
+                }
+                else
+                {
+                    response.Add(fileName, "Already exists");
+                }
             }
-            return list;
+
+            return response;
         }
 
     }
