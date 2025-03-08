@@ -6,7 +6,7 @@ dotnet: 8.0
 services: docker
 before_install:
     - cd RestWithASPNETUdemy/
-    - echo "CI bem sucessedido!"
+    - echo "CI bem sucessedido cara!"
 script:
     - docker-compose build
 before_deploy:
