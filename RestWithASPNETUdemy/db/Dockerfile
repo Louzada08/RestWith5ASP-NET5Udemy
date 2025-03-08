@@ -1,4 +1,4 @@
-FROM mysql:5.7.22
+FROM mysql:8.0.41
 EXPOSE 3306
 COPY ./RestWithASPNETUdemy/db/migrations/ /home/database/
 COPY ./RestWithASPNETUdemy/db/dataset/ /home/database/

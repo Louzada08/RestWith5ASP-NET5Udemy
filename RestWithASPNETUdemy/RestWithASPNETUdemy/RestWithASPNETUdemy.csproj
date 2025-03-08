@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<NoWarn>$(NoWarn);1591</NoWarn>
+	<InvariantGlobalization>true</InvariantGlobalization>
+	<RootNamespace>RestWithASPNETUdemy</RootNamespace>  
 	<UserSecretsId>ca74d306-74b4-40fa-a011-5afdda64e2e9</UserSecretsId>
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
