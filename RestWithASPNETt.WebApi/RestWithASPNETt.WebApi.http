@@ -1,0 +1,6 @@
+@RestWithASPNETt.WebApi_HostAddress = http://localhost:5188
+
+GET {{RestWithASPNETt.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

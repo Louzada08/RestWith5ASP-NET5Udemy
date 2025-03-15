@@ -27,6 +27,9 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+//ConfigEnvironment(new ConfigurationBuilder());
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc(appVersion, new()
@@ -65,10 +68,10 @@ builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(
     new MySqlServerVersion(new Version(8, 0, 29)))
 );
 
-//if(builder.Environment.IsDevelopment())
-//{
-//    MigrateDatabase(connection);
-//}
+if (builder.Environment.IsDevelopment())
+{
+    MigrateDatabase(connection);
+}
 
 builder.Services.AddMvc(options =>
 {
@@ -86,7 +89,10 @@ builder.Services.AddServicesInjector();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() ||
+    app.Environment.IsEnvironment("Development") ||
+    app.Environment.IsEnvironment("Development-swagger")
+   )
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -104,6 +110,14 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+//void ConfigEnvironment(ConfigurationBuilder configurationBuilder)
+//{
+//    configurationBuilder.SetBasePath(builder.Environment.ContentRootPath)
+//    .AddJsonFile("appsettings.json", true, true)
+//    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+//    .AddEnvironmentVariables();
+//}
 
 void MigrateDatabase(String connection)
 {

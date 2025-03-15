@@ -1,6 +1,5 @@
 ﻿using RestWithASPNETUdemy.Data.Converter.Implementations;
 using RestWithASPNETUdemy.Data.VO;
-using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository.Specific.PersonRepo;
 
 namespace RestWithASPNETUdemy.Services.Implementations
@@ -34,12 +33,16 @@ namespace RestWithASPNETUdemy.Services.Implementations
 
         public async Task<List<PersonVO>> FindAll()
         {
-            return _converter.Parse(await _repository.FindAll());
+            var result = _converter.Parse(await _repository.FindAll());
+            return result;
+
+
         }
 
         public async Task<PersonVO> FindById(long id)
         {
-            return  _converter.Parse(await _repository.FindById(id));
+            var result =  _converter.Parse(await _repository.FindById(id));
+            return result;
         }
 
         public async Task<List<PersonVO>> FindByName(string firstName, string lastName)
