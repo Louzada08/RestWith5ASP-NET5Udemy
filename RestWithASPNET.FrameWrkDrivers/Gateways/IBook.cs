@@ -1,4 +1,4 @@
-﻿namespace RestWithASPNET.Domain.Entities
+﻿namespace RestWithASPNET.FrameWrkDrivers.Gateways
 {
     public interface IBook<O,D>
     {
