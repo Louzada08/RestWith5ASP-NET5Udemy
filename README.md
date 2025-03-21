@@ -1,4 +1,30 @@
-# RestWith5ASP-NET5Udemy
+# O que são camadas e pastas?
+**Camadas são conceitos arquiteturais, enquanto pastas são implementações físicas para organizar o código.**
+
+Deixe-me detalhar:
+
+*   **Camadas (Layers):** São divisões lógicas da sua aplicação, cada uma com uma responsabilidade específica. Elas definem a arquitetura geral do seu sistema. Exemplos: Camada de Apresentação (WebAPI), Camada de Aplicação (Casos de Uso), Camada de Domínio (Entidades, Value Objects, Domain Services), Camada de Infraestrutura (Acesso a Dados, Serviços Externos).  As camadas definem *o que* faz cada parte do sistema.
+*   **Pastas (Folders):** São diretórios no seu sistema de arquivos que você usa para organizar os arquivos de código que implementam as camadas. Elas são uma forma de estruturar fisicamente o seu projeto para facilitar a manutenção e a colaboração. As pastas definem *onde* o código está localizado.
+
+**Analogia:**
+
+Imagine uma casa.
+
+*   **Camadas:** São os cômodos da casa (sala, cozinha, quartos, banheiros). Cada cômodo tem uma função específica.
+*   **Pastas:** São os armários, gavetas e prateleiras dentro de cada cômodo. Eles ajudam a organizar os objetos dentro de cada cômodo.
+
+**Na prática:**
+
+*   Uma única camada pode ser implementada em várias pastas. Por exemplo, a camada de Aplicação pode ter pastas para cada caso de uso (`ListarProdutos`, `CriarPedido`, etc.).
+*   Uma única pasta pode conter código de várias camadas, mas isso geralmente não é recomendado, pois pode levar a uma arquitetura confusa e difícil de manter.
+
+**No seu projeto:**
+
+A estrutura que você definiu (com `src`, `Domain`, `Application`, `Infrastructure`, etc.) é uma forma de organizar as pastas para refletir as camadas da sua arquitetura. Cada pasta representa uma camada e contém os arquivos de código que implementam essa camada.
+
+**Em resumo:**
+
+Camadas são a arquitetura, pastas são a organização do código. As pastas são uma ferramenta para implementar e organizar as camadas de forma eficiente.
 # Camada Domain/Service
 Na camada `DomainServices`, de acordo com a arquitetura que você definiu, o recomendado é implementar lógicas de negócio complexas que envolvem múltiplas entidades de domínio ou que não se encaixam naturalmente em uma única entidade.  Esses serviços devem ser independentes de qualquer framework ou tecnologia específica (como Entity Framework Core ou ASP.NET Core).
 
