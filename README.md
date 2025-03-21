@@ -26,3 +26,36 @@ Na camada `DomainServices`, de acordo com a arquitetura que você definiu, o rec
 **Em resumo:**
 
 A camada `DomainServices` é o lugar para implementar a lógica de negócio complexa que é central para o seu domínio. Ela deve ser independente de qualquer framework ou tecnologia específica e deve se concentrar em resolver problemas de negócio, não problemas técnicos.
+
+# DbContext aplicação
+Ótima pergunta! O `DbContext` (do Entity Framework Core, por exemplo) deve ser colocado na camada **Infrastructure**.
+
+**Justificativa:**
+
+*   **Detalhes de Implementação:** O `DbContext` é uma classe que representa a conexão com o banco de dados e a forma como os dados são persistidos. Isso é um detalhe de implementação da camada de infraestrutura. O domínio (e as camadas superiores) não devem ter conhecimento de como os dados são armazenados.
+*   **Dependência Externa:** O `DbContext` depende de um provedor de banco de dados específico (SQL Server, PostgreSQL, etc.). Colocá-lo em uma camada superior introduziria uma dependência desnecessária no domínio.
+*   **Responsabilidade da Infraestrutura:** A camada `Infrastructure` é responsável por lidar com todos os detalhes de acesso a dados, incluindo a conexão com o banco de dados, a execução de consultas e a persistência de dados.
+
+**Estrutura:**
+
+Dentro da camada `Infrastructure`, você pode criar uma pasta chamada `Data` ou `Persistence` para organizar o `DbContext` e classes relacionadas. Por exemplo:
+
+```
+Infrastructure/
+├── Data/
+│   ├── ApplicationDbContext.cs  (Seu DbContext)
+│   ├── Migrations/  (Pastas geradas pelo Entity Framework Core)
+│   └── ...
+├── Repositories/
+│   └── ProdutoRepository.cs
+├── Gateways/
+│   └── IProdutoRepository.cs
+└── ...
+```
+
+**Importante:**
+
+*   O `DbContext` deve ser registrado como um serviço no seu contêiner de injeção de dependência (geralmente no `Program.cs` da sua WebAPI).
+*   Os repositórios (como `ProdutoRepository.cs`) usarão o `DbContext` para acessar os dados do banco de dados.
+
+Em resumo, o `DbContext` é um componente da infraestrutura e deve ser colocado lá para manter a separação de responsabilidades e a independência do domínio.
