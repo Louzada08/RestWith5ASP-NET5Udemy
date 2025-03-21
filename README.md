@@ -28,7 +28,7 @@ Na camada `DomainServices`, de acordo com a arquitetura que você definiu, o rec
 A camada `DomainServices` é o lugar para implementar a lógica de negócio complexa que é central para o seu domínio. Ela deve ser independente de qualquer framework ou tecnologia específica e deve se concentrar em resolver problemas de negócio, não problemas técnicos.
 
 # DbContext aplicação
-Ótima pergunta! O `DbContext` (do Entity Framework Core, por exemplo) deve ser colocado na camada **Infrastructure**.
+O `DbContext` (do Entity Framework Core, por exemplo) deve ser colocado na camada **Infrastructure**.
 
 **Justificativa:**
 
