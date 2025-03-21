@@ -1,4 +1,4 @@
-# Arquitetura - Exemplo
+# Arquitetura - Estrutura
 meu-projeto/
 ├── src/
 │   ├── Domain/
@@ -94,7 +94,7 @@ A arquitetura do seu projeto segue os princípios da **Clean Architecture** (tam
 
 Esta arquitetura visa criar um sistema robusto, flexível e fácil de manter, permitindo que você adapte a aplicação às mudanças nos requisitos do negócio sem comprometer a sua integridade.
 
-# O que são camadas e pastas?
+## O que são camadas e pastas?
 **Camadas são conceitos arquiteturais, enquanto pastas são implementações físicas para organizar o código.**
 
 Deixe-me detalhar:
