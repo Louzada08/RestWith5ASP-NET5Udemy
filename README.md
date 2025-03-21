@@ -42,6 +42,7 @@ meu-projeto/
 │   │   └── Program.cs (Configuração da API)
 └── ...
 
+Defina esta arquitetura acima
 ## Definição da Arquitetura do Projeto
 
 A arquitetura do seu projeto segue os princípios da **Clean Architecture** (também conhecida como Hexagonal Architecture ou Ports and Adapters) com influências de **Domain-Driven Design (DDD)**. O objetivo principal é criar um sistema desacoplado, testável, e fácil de manter, separando as preocupações e garantindo que a lógica de negócio central (o Domínio) seja independente de detalhes de implementação externos.
