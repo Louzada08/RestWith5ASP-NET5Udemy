@@ -13,19 +13,18 @@ meu-projeto/
 │   │   ├── DomainServices/
 │   │   │   ├── CalculadoraDeDesconto.cs
 │   │   │   └── ServicoDeEstoque.cs
-│   │   ├── DomainEvents/
-│   │   │   └── ProdutoEstoqueBaixoEvent.cs
 │   ├── Application/ (Camada de Casos de Uso - Use Cases)
-│   │   ├── ListarProdutos/
-│   │   │   ├── ListarProdutos.cs
-│   │   │   ├── ListarProdutosInputPort.cs
-│   │   │   └── ListarProdutosOutputPort.cs
-│   │   └── ...
+│   │   ├── Commands/
+│   │   │   ├──Handlers/
+│   │   │           |── ProdutoCommandHandler.cs
+│   │   ├── Queries/
+│   │   └── Services/
+│   │        ├── ListarProdutosService.cs
 │   ├── Infrastructure/ (FrameworksAndDrivers)
 │   │   ├── Repositories/
 │   │   │   └── ProdutoRepository.cs
 │   │   ├── Gateways/
-│   │   │   └── IProdutoRepository.cs  // Interface agora reside aqui
+│   │   │   └── IProdutoRepository.cs  // Interface reside aqui
 │   │   └── ...
 │   ├── InterfaceAdapter/
 │   │   ├── Presenters/
@@ -42,58 +41,30 @@ meu-projeto/
 │   │   └── Program.cs (Configuração da API)
 └── ...
 
-Defina esta arquitetura acima
 ## Definição da Arquitetura do Projeto
+A arquitetura acima foi definida como uma variação de **Clean Architecture** (Arquitetura Limpa) com influências de **Domain-Driven Design (DDD)**. Vamos detalhar os principais aspectos:
 
-A arquitetura do seu projeto segue os princípios da **Clean Architecture** (também conhecida como Hexagonal Architecture ou Ports and Adapters) com influências de **Domain-Driven Design (DDD)**. O objetivo principal é criar um sistema desacoplado, testável, e fácil de manter, separando as preocupações e garantindo que a lógica de negócio central (o Domínio) seja independente de detalhes de implementação externos.
+**Principais Características:**
 
-**Visão Geral das Camadas:**
+*   **Separação de Responsabilidades:** A arquitetura é fortemente baseada na separação de responsabilidades, com cada camada tendo uma função específica e bem definida.
+*   **Independência de Frameworks:** O núcleo do domínio (camada `Domain`) é independente de qualquer framework ou tecnologia específica, como Entity Framework Core ou ASP.NET Core. Isso facilita a testabilidade e a manutenção.
+*   **Fluxo de Dependência:** As dependências fluem em uma única direção: as camadas externas dependem das camadas internas, mas as camadas internas não dependem das camadas externas. Isso garante que as mudanças nas camadas externas não afetem o núcleo do domínio.
+*   **Camadas:**
+    *   **Domain (Domínio):** Contém as entidades, value objects, aggregates e domain services que representam os conceitos do negócio. É o coração da aplicação.
+    *   **Application (Aplicação):** Contém os casos de uso (comandos e queries) que orquestram a lógica de negócio e coordenam as interações entre o domínio e a infraestrutura.
+    *   **Infrastructure (Infraestrutura):** Contém os detalhes de implementação, como acesso a dados, serviços externos e comunicação com o sistema de arquivos.
+    *   **InterfaceAdapter (Adaptador de Interface):** Contém os componentes que adaptam os dados do domínio para as necessidades específicas da interface de usuário (ViewModels, Presenters, Mappers).
+    *   **WebAPI (Apresentação):** Contém a camada de apresentação, que expõe a API para os clientes.
 
-1.  **Domain (Domínio):**
-    *   **Responsabilidade:** Contém a lógica de negócio central da aplicação. Representa os conceitos do negócio, as regras e os processos. É a camada mais interna e independente.
-    *   **Componentes:**
-        *   **Entities (Entidades):** Representam os objetos do negócio com identidade (ex: `Produto`, `Categoria`).
-        *   **ValueObjects (Objetos de Valor):** Representam características descritivas do negócio sem identidade própria (ex: `Preco`, `Estoque`). São imutáveis.
-        *   **Aggregates (Agregados):** Agrupamentos de entidades e value objects que são tratados como uma unidade.  `Produto` é um Aggregate Root neste caso.
-        *   **DomainServices (Serviços de Domínio):** Lógica de negócio complexa que não se encaixa naturalmente em uma entidade ou value object.
-        *   **DomainEvents (Eventos de Domínio):**  Notificações que indicam que algo importante aconteceu no domínio.
+**Padrões e Práticas:**
 
-2.  **Application (Aplicação):**
-    *   **Responsabilidade:** Orquestra a lógica de negócio, coordenando as interações entre o Domínio e a Infraestrutura. Implementa os casos de uso da aplicação.
-    *   **Componentes:**
-        *   **Use Cases (Casos de Uso):** Representam as ações que os usuários podem realizar na aplicação (ex: `ListarProdutos`).  Implementados com padrões como Input Ports e Output Ports para desacoplamento.
-        *   **Input Ports (Portas de Entrada):** Interfaces que definem como os casos de uso são acessados.
-        *   **Output Ports (Portas de Saída):** Interfaces que definem as dependências que os casos de uso precisam (ex: repositórios).
+*   **DDD (Domain-Driven Design):** A estrutura de pastas dentro da camada `Domain` (Entities, ValueObjects, Aggregates, DomainServices) reflete os princípios do DDD.
+*   **CQRS (Command Query Responsibility Segregation):** A separação entre `Commands` e `Queries` na camada `Application` sugere a adoção do padrão CQRS, que separa as operações de leitura (queries) das operações de escrita (comandos).
+*   **Dependency Inversion Principle (DIP):** O uso de interfaces (como `IProdutoRepository`) na camada `Infrastructure` e a injeção de dependências na camada `Application` demonstram a aplicação do DIP.
 
-3.  **Infrastructure (Infraestrutura):**
-    *   **Responsabilidade:** Implementa os detalhes técnicos da aplicação, como acesso a dados, comunicação com serviços externos, e envio de e-mails.
-    *   **Componentes:**
-        *   **Repositories (Repositórios):** Abstraem o acesso aos dados, fornecendo uma interface para persistir e recuperar entidades.
-        *   **Gateways (Interfaces de Repositório):**  Definem as interfaces que os repositórios devem implementar.  Isso permite trocar a implementação do banco de dados sem afetar o resto da aplicação.
-        *   **Outros Serviços:**  Serviços para lidar com armazenamento de arquivos, envio de e-mails, etc.
+**Em resumo:**
 
-4.  **InterfaceAdapter (Adaptador de Interface):**
-    *   **Responsabilidade:** Converte os dados entre o formato do Domínio e o formato da camada de Apresentação (WebAPI).
-    *   **Componentes:**
-        *   **Presenters (Apresentadores):** Formatam os dados para serem exibidos na interface do usuário.
-        *   **ViewModels (Modelos de Visualização):** Representam os dados que serão exibidos na interface do usuário.
-        *   **Mappers (Mapeadores):** Convertem os dados entre as diferentes camadas (Domínio -> ViewModel, etc.).  AutoMapper é usado para simplificar esse processo.
-
-5.  **WebAPI (Camada de Apresentação):**
-    *   **Responsabilidade:** Fornece a interface para os usuários interagirem com a aplicação.
-    *   **Componentes:**
-        *   **Controllers (Controladores):** Recebem as requisições HTTP e as encaminham para os casos de uso na camada de Aplicação.
-        *   **Filters (Filtros):**  Implementam lógica de tratamento de exceções e outras tarefas de pré e pós-processamento.
-        *   **Program.cs:** Configuração da API (injeção de dependência, roteamento, etc.).
-
-**Princípios Chave:**
-
-*   **Dependency Rule (Regra da Dependência):** As dependências de código devem apontar para dentro. As camadas externas dependem das camadas internas, mas as camadas internas não dependem das camadas externas.
-*   **Separation of Concerns (Separação de Preocupações):** Cada camada tem uma responsabilidade específica e bem definida.
-*   **Testability (Testabilidade):** A arquitetura facilita a criação de testes unitários e de integração, pois as camadas são desacopladas e podem ser testadas isoladamente.
-*   **Maintainability (Manutenibilidade):** A arquitetura facilita a manutenção e a evolução do sistema, pois as mudanças em uma camada têm pouco impacto nas outras camadas.
-
-Esta arquitetura visa criar um sistema robusto, flexível e fácil de manter, permitindo que você adapte a aplicação às mudanças nos requisitos do negócio sem comprometer a sua integridade.
+A arquitetura é uma implementação bem estruturada de Clean Architecture com influências de DDD e CQRS, projetada para criar aplicações escaláveis, testáveis e fáceis de manter. A separação clara de responsabilidades e a independência do domínio são os principais benefícios dessa abordagem.
 
 ## O que são camadas e pastas?
 **Camadas são conceitos arquiteturais, enquanto pastas são implementações físicas para organizar o código.**
