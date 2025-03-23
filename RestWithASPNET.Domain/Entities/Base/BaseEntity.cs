@@ -1,10 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using RestWithASPNET.Domain.Interfaces.Base;
 
-namespace RestWithASPNET.Domain.Entities.Base
+namespace RestWithASPNET.Domain.Entities.Base;
+
+public class BaseEntity : IBase
 {
-    public class BaseEntity
+    public BaseEntity()
     {
-        [Column("id")]
-        public long Id { get; set; }
+        Id = Guid.NewGuid();
     }
+
+    public BaseEntity(DateTime createdAt) : this()
+    {
+        CreatedAt = createdAt;
+    }
+
+    public BaseEntity(Guid id, DateTime createdAt)
+    {
+        Id = id;
+        CreatedAt = createdAt;
+    }
+
+    public Guid Id { get; set; }
+    public DateTime? CreatedAt { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public DateTime? UpdatedAt { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public DateTime? DeletedAt { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 }

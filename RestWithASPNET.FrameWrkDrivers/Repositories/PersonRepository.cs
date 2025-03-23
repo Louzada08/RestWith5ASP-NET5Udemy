@@ -1,16 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RestWithASPNET.Domain.Entities;
+using RestWithASPNET.Domain.Interfaces.Repositories;
 using RestWithASPNET.FrameWrkDrivers.Data.Context;
-using RestWithASPNET.FrameWrkDrivers.Gateways;
 using RestWithASPNET.FrameWrkDrivers.Repositories.Generic;
 
 namespace RestWithASPNET.FrameWrkDrivers.Repositories
 {
     public class PersonRepository : GenericRepository<Person>, IPersonRepository
     {
-        public PersonRepository(MySQLContext context) : base(context)
+        private readonly MySQLContext _context;
+        public PersonRepository(MySQLContext context, IMapper mapper) : base(context, mapper)
         {
+            _context = context;
         }
+        IUnitOfWork UnitOfWork => _context;
 
         public async Task<Person> Disable(long id)
         {
@@ -31,26 +35,6 @@ namespace RestWithASPNET.FrameWrkDrivers.Repositories
                 }
             }
 
-            return person;
-        }
-
-        public async Task<List<Person>> FindByName(string firstName, string lastName)
-        {
-            var person = new List<Person>();
-
-            if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
-            { 
-                 person = await _context.Persons.Where(p => p.FirstName.Contains(firstName) &&
-                        p.LastName.Contains(lastName)).ToListAsync();
-            }
-            else if (string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
-            {
-                person = await _context.Persons.Where(p => p.LastName.Contains(lastName)).ToListAsync();
-            }
-            else if (!string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName))
-            {
-                person = await _context.Persons.Where(p => p.FirstName.Contains(firstName)).ToListAsync();
-            }
             return person;
         }
     }
