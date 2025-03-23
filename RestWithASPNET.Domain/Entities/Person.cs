@@ -1,10 +1,11 @@
 ﻿using RestWithASPNET.Domain.Entities.Base;
+using RestWithASPNET.Domain.Interfaces.Base;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestWithASPNET.Domain.Entities
 {
     [Table("person")]
-    public class Person : BaseEntity
+    public class Person : BaseEntity, IAggregateRoot
     {
         [Column("first_name")]
         public string FirstName { get; set; } = string.Empty;
@@ -20,5 +21,8 @@ namespace RestWithASPNET.Domain.Entities
 
         [Column("enabled")]
         public bool Enabled { get; set; }
+        public Guid? CreatedById { get; set; }
+        public User? CreatedBy { get; set; }
+
     }
 }

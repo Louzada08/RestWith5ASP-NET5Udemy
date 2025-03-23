@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Mappers\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Presenters\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RestWithASPNET.Application\RestWithASPNET.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,11 +1,13 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestWithASPNET.Application.Services.File;
+using RestWithASPNET.Domain.Entities;
 using RestWithASPNET.Domain.ValueObjects;
 
 namespace RestWithASPNET.WebApi.Controllers
 {
-    [ApiVersion("2")]
+    [ApiVersion("1")]
     [Authorize("Bearer")]
     [ApiController]
     [Route("api/[controller]/v{version:apiVersion}")]

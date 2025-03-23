@@ -1,12 +1,12 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RestWithASPNET.Domain.Interfaces.Book;
+using RestWithASPNET.Application.Services.Interfaces.Books;
 using RestWithASPNET.Domain.ValueObjects;
 
 namespace RestWithASPNET.WebApi.Controllers
 {
-    [ApiVersion("2")]
+    [ApiVersion("1")]
     [ApiController]
     [Authorize("Bearer")]
     [Route("api/[controller]/v{version:apiVersion}")]
@@ -26,9 +26,10 @@ namespace RestWithASPNET.WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Policy = "Vendas")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _bookService.FindAll());
+            return Ok(await _bookService.GetAll());
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace RestWithASPNET.WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(long id)
+        public async Task<IActionResult> Get(Guid id)
         {
             var book = await _bookService.FindById(id);
             if (book == null) return NotFound();
@@ -62,7 +63,7 @@ namespace RestWithASPNET.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(long id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _bookService.Delete(id);
             return NoContent();

@@ -1,88 +1,60 @@
 ﻿
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using RestWithASPNET.Domain.Entities.Base;
+using RestWithASPNET.Domain.Interfaces.Repositories;
 using RestWithASPNET.FrameWrkDrivers.Data.Context;
-using RestWithASPNET.FrameWrkDrivers.Gateways.Generic;
+using System.Linq.Expressions;
 
 namespace RestWithASPNET.FrameWrkDrivers.Repositories.Generic
 {
-    public class GenericRepository<T> : IRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T>, IDisposable where T : class
     {
-        protected MySQLContext _context;
-        private DbSet<T> dataset;
-        public GenericRepository(MySQLContext context)
+        protected MySQLContext _context { get; }
+        protected IUnitOfWork UnitOfWork { get; set; }
+
+        IUnitOfWork IGenericRepository<T>.UnitOfWork => UnitOfWork;
+
+        protected readonly DbSet<T> dataset;
+        private readonly IMapper _mapper;
+
+        public GenericRepository(MySQLContext context, IMapper mapper)
         {
             _context = context;
             dataset = _context.Set<T>();
+            this.UnitOfWork = _context as IUnitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<T> Create(T item)
+        public T Create(T entity)
         {
-            try
-            {
-                await dataset.AddAsync(item);
-                await _context.SaveChangesAsync();
-                return item;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
+            //if(entity is BaseEntity baseEntity)
+            //{
+            //    baseEntity.CreatedAt = DateTime.UtcNow;
+            //    baseEntity.UpdatedAt = DateTime.UtcNow; 
+            //}
+                dataset.Add(entity);
+                return entity;
         }
 
-        public async Task<T> Update(T item)
+        public virtual T Update(T entity)
         {
-            var result = await dataset.SingleOrDefaultAsync(p => p.Id.Equals(item.Id));
-            if (result != null)
-            {
-                try
-                {
-                    _context.Entry(result).CurrentValues.SetValues(item);
-                    await _context.SaveChangesAsync();
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }
-            else
-            {
-                return null;
-            }
+            dataset.Remove(entity);
+
+            return entity;
         }
 
-        public async Task Delete(long id)
+        public T Delete(T entity)
         {
-            var result = dataset.SingleOrDefault(p => p.Id.Equals(id));
-            if (result != null)
-            {
-                try
-                {
-                    dataset.Remove(result);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }
+            var entry = _context.Entry(entity);
+            dataset.Attach(entity);
+            entry.State = EntityState.Modified;
+
+            return entity;
         }
 
-        public async Task<List<T>> FindAll()
+        public T FindById(params object[] ids)
         {
-            return await dataset.ToListAsync();
-        }
-
-        public async Task<T> FindById(long id)
-        {
-            return await dataset.SingleOrDefaultAsync(p => p.Id.Equals(id));
-        }
-
-        public async Task<bool> Exists(long id)
-        {
-            return await dataset.AnyAsync(p => p.Id.Equals(id));
+            return dataset.Find(ids);
         }
 
         public async Task<List<T>> FindWithPagedSearch(string query)
@@ -104,5 +76,53 @@ namespace RestWithASPNET.FrameWrkDrivers.Repositories.Generic
             }
             return int.Parse(result);
         }
+
+        public IQueryable<T> QueryableFilter() => dataset.AsQueryable();
+
+        public IQueryable<T> QueryableFor(Expression<Func<T, bool>> criterio = null, 
+            bool @readonly = false, params Expression<Func<T, object>>[] includes)
+        {
+            if (criterio == null)
+            {
+                if (includes == null)
+                {
+                    return dataset.Where(criterio);
+                }
+
+                var queryAll = dataset.AsQueryable();
+                foreach (var include in includes)
+                {
+                    queryAll.Include(include);
+                }
+
+                return @readonly ? queryAll.AsNoTracking() : queryAll;
+            }
+
+            var queryWhere = dataset.Where(criterio);
+
+            if (includes == null)
+            {
+                return queryWhere;
+            }
+
+            foreach (var include in includes)
+            {
+                queryWhere = queryWhere.Include(include);
+            }
+
+            return queryWhere;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing) return;
+
+            _context.Dispose();
+        }
+
     }
 }

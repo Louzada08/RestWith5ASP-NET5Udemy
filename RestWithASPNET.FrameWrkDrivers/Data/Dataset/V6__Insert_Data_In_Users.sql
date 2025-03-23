@@ -1,2 +1,2 @@
-﻿INSERT INTO `users` (`user_name`, `password`, `full_name`, `refresh_token`, `refresh_token_expiry_time`) VALUES
-('leandro', '240BE518FABD2724DDB6F04EEB1DA5967448D7E831C08C8FA822809F74C720A9', 'LEANDRO DA COSTA GONCALVES', 'h9lzVOoLlBoTbcQrh/e16/aIj+4p6C67lLdDbBRMsjE=', '2020-09-27 17:30:49');
+﻿INSERT INTO `users` (`user_name`, `password`, `full_name`,`email`, `refresh_token`, `refresh_token_expiry_time`) VALUES
+('leandro', '240BE518FABD2724DDB6F04EEB1DA5967448D7E831C08C8FA822809F74C720A9', 'LEANDRO DA COSTA GONCALVES','leandrocosta@hotmail.com' ,'h9lzVOoLlBoTbcQrh/e16/aIj+4p6C67lLdDbBRMsjE=', '2020-09-27 17:30:49');
