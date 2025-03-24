@@ -32,7 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\RestWithASPNET.Adapter\RestWithASPNET.Adapter.csproj" />
     <ProjectReference Include="..\RestWithASPNET.Application\RestWithASPNET.Application.csproj" />
-    <ProjectReference Include="..\RestWithASPNET.FrameWrkDrivers\RestWithASPNET.FrameWrkDrivers.csproj" />
   </ItemGroup>
 
 </Project>

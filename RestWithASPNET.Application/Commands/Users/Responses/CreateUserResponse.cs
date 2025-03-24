@@ -1,5 +1,4 @@
-﻿
-using RestWithASPNET.Domain.Entities;
+﻿using RestWithASPNET.Domain.Entities;
 
 namespace RestWithASPNET.Application.Commands.Users.Requests;
 

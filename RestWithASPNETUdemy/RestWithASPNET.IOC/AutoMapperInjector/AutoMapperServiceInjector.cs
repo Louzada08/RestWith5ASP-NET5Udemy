@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using RestWithASPNET.FrameWrkDrivers.AutoMappers;
 
-namespace RestWithASPNET.FrameWrkDrivers.Services;
+namespace RestWithASPNET.IOC.AutoMapperInjector;
 
 public static class AutoMapperServiceInjector
 {
@@ -11,6 +10,7 @@ public static class AutoMapperServiceInjector
         var mapperConfig = new MapperConfiguration(mc =>
         {
             mc.AddProfile(new PersonProfile());
+            mc.AddProfile(new UserProfile());
         });
 
         var mapper = mapperConfig.CreateMapper();

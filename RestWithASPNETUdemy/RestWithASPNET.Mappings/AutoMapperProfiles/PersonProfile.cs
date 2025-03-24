@@ -4,7 +4,7 @@ using RestWithASPNET.Application.Commands.Persons.Responses;
 using RestWithASPNET.Domain.Entities;
 using RestWithASPNET.Domain.ValueObjects;
 
-namespace RestWithASPNET.FrameWrkDrivers.AutoMappers;
+namespace RestWithASPNET.Mappings.AutoMapperProfiles;
 
 public class PersonProfile : Profile
 {

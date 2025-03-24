@@ -1,11 +1,14 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestWithASPNET.Adapter.ViewModels;
+using RestWithASPNET.Application.Commands.Users.Requests;
 using RestWithASPNET.Application.Interfaces.Users;
-using RestWithASPNET.Application.Services.Login;
 using RestWithASPNET.Application.Services.Token;
+using RestWithASPNET.Domain.Validation;
 using RestWithASPNET.Domain.ValueObjects;
 
 namespace RestWithASPNET.WebApi.Controllers
@@ -16,11 +19,10 @@ namespace RestWithASPNET.WebApi.Controllers
     public class AuthController : MainController
     {
         private readonly TokenService _tokenService;
-        private readonly IUserService _userService2;
-        private readonly ILoginService _userService;
+        private readonly IUserService _userService;
 
         public AuthController(IMapper mapper, IMediator mediator, TokenService tokenService,
-                 IUserService userService2, ILoginService userService) : base(mapper, mediator)
+                 IUserService userService) : base(mapper, mediator)
         {
             _userService = userService;
             _tokenService = tokenService;
@@ -32,12 +34,26 @@ namespace RestWithASPNET.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("signin")]
-        public IActionResult Signin([FromBody] UserVO user)
+        public async Task<IActionResult> Signin([FromBody] CreateUserRequest command)
         {
-            if (user == null) return BadRequest("Solicitação de cliente invalida");
-            var token = _userService.ValidateCredentials(user);
-            if (token == null) return Unauthorized();
-            return Ok(token);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            try
+            {
+                if (command is null) return CustomResponse(new { Status = StatusCodes.Status400BadRequest, Error = "Token Vazio!!!" });
+
+                var response = await _mediator.Send(command);
+
+                var tokenVM = _mapper.Map<TokenViewModel>(response);
+
+                return CustomResponse(tokenVM);
+            }
+            catch (Exception ex)
+            {
+                var bag = new ValidationResultBag();
+                bag.Errors.Add(new ValidationFailure("error", ex.Message));
+                return CustomResponse(bag);
+            }
         }
 
         /// <summary>

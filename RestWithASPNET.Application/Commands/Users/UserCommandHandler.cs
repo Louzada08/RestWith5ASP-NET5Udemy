@@ -31,7 +31,7 @@ public class UserCommandHandler : CommandHandler,
     {
         var user = _mapper.Map<User>(request);
 
-        var response = user.CanAdd(_userRepository, user);
+        var response = user.CancelCreationIfExists(_userRepository, user);
 
         if (!response.IsValid)
         {

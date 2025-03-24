@@ -7,12 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\" />
     <Folder Include="Presenters\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RestWithASPNET.Application\RestWithASPNET.Application.csproj" />
+    <ProjectReference Include="..\RestWithASPNET.Domain\RestWithASPNET.Domain.csproj" />
+    <ProjectReference Include="..\RestWithASPNETUdemy\RestWithASPNET.IOC\RestWithASPNET.IOC.csproj" />
   </ItemGroup>
 
 </Project>

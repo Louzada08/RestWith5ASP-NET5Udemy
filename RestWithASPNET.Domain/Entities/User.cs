@@ -25,7 +25,7 @@ namespace RestWithASPNET.Domain.Entities
         public DateTime RefreshTokenExpiryTime { get; set; }
         public UserRolesEnum UserRole { get; set; }
 
-        public ValidationResultBag CanAdd(IGenericRepository<User> repository, User entity)
+        public ValidationResultBag CancelCreationIfExists(IGenericRepository<User> repository, User entity)
         {
             var result = new ValidationResultBag();
             var dbUser = repository.QueryableFor(u => u.Email == entity.Email).FirstOrDefault();
@@ -36,7 +36,7 @@ namespace RestWithASPNET.Domain.Entities
             return result;
         }
 
-        public ValidationResultBag CanUpdate(IGenericRepository<User> repository, User entity)
+        public ValidationResultBag CancelChangeIfExists(IGenericRepository<User> repository, User entity)
         {
             var result = new ValidationResultBag();
             var dbUserEmail = repository.QueryableFor(u => u.Email == entity.Email).FirstOrDefault();

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ConverterVO\" />
     <Folder Include="Data\Configuration\" />
     <Folder Include="Gateways\Generic\" />
     <Folder Include="Services\File\" />
